@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Derby Road Trainspotting</title>
+  <style>
+    body {
+      background-color: #000;
+      color: #90ee90;
+      font-family: 'Courier New', monospace;
+      margin: 0;
+      padding: 20px;
+    }
+    h1 {
+      color: #ffcc00;
+      text-align: center;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    th, td {
+      border: 1px solid #444;
+      padding: 8px;
+      text-align: center;
+    }
+    th {
+      background-color: #222;
+      color: #ffcc00;
+    }
+    td {
+      color: #90ee90;
+    }
+    .status-cancelled {
+      color: red;
+    }
+    .status-on-time {
+      color: #90ee90;
+    }
+  </style>
+</head>
+<body>
+  <h1>Derby Road Trainspotting</h1>
+  <table>
+    <thead>
+      <tr>
+        <th>Headcode</th>
+        <th>Class</th>
+        <th>ETA</th>
+        <th>Speed (mph)</th>
+        <th>Approach Side</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody id="train-table">
+      <!-- Dynamic rows go here -->
+    </tbody>
+  </table>
+
+  <script>
+    async function fetchTrainData() {
+      // Replace this with a real API call to Realtime Trains or Open Rail Data
+      const trains = [
+        {
+          headcode: "6L37",
+          class: "66",
+          eta: "16:42",
+          speed: 60,
+          origin: "Felixstowe",
+          status: "On Time"
+        },
+        {
+          headcode: "4M89",
+          class: "70",
+          eta: "16:55",
+          speed: 75,
+          origin: "Westerfield",
+          status: "Cancelled"
+        }
+      ];
+
+      const table = document.getElementById("train-table");
+      table.innerHTML = "";
+
+      trains.forEach(train => {
+        const side = train.origin.includes("Felixstowe") ? "Park Side" : "Bridge Side";
+        const statusClass = train.status === "Cancelled" ? "status-cancelled" : "status-on-time";
+
+        const row = `
+          <tr>
+            <td>${train.headcode}</td>
+            <td>${train.class}</td>
+            <td>${train.eta}</td>
+            <td>${train.speed}</td>
+            <td>${side}</td>
+            <td class="${statusClass}">${train.status}</td>
+          </tr>
+        `;
+        table.innerHTML += row;
+      });
+    }
+
+    fetchTrainData();
+    setInterval(fetchTrainData, 60000); // Refresh every minute
+  </script>
+</body>
+</html>
